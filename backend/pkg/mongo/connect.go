@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"time"
 
+	config "github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/config"
+
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -42,12 +44,13 @@ func ping(client *mongo.Client, ctx context.Context) error {
 }
 
 func connect_mongodb() *mongo.Client {
-	client, ctx, cancel, err := connect("mongodb://localhost:27017")
+	client, ctx, _, err := connect(config.AppConfig.MongoUri)
 	if err != nil {
 		panic(err)
 	}
 
-	defer close(client, ctx, cancel)
+	// TODO (Matej)
+	//defer close(client, ctx, cancel)
 
 	ping(client, ctx)
 
@@ -55,4 +58,4 @@ func connect_mongodb() *mongo.Client {
 }
 
 var client = connect_mongodb()
-var Db = client.Database("ScalableProgramming")
+var Db = client.Database(config.AppConfig.MongoDatabase)
