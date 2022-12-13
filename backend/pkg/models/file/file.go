@@ -3,7 +3,7 @@ package file
 import (
 	"time"
 
-	"github.com/Scalable-Programming/file-processing-full-text-search/pkg/models/file_status"
+	"github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/models/file_status"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

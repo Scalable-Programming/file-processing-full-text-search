@@ -1,4 +1,4 @@
-module github.com/Scalable-Programming/file-processing-full-text-search
+module github.com/Scalable-Programming/file-processing-full-text-search/backend
 
 go 1.19
 
