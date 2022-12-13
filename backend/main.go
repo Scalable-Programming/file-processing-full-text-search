@@ -1,19 +1,16 @@
 package main
 
 import (
-	"net/http"
+	routes "github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/routes"
 
 	"github.com/gin-gonic/gin"
 )
 
-// getAlbums responds with the list of all albums as JSON.
-func getAlbums(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, nil)
-}
-
 func main() {
 	router := gin.Default()
-	router.GET("/albums", getAlbums)
+
+	routes.GetFilesRoute(router)
+	routes.GetFilesRoute(router)
 
 	router.Run("localhost:8080")
 }
