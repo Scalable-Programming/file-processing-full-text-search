@@ -9,14 +9,14 @@ import (
 )
 
 type File struct {
-	Id            primitive.ObjectID `bjson:"_id"`
-	CreatedAt     time.Time          `bjson:"createdAt"`
-	ContentType   string             `bjson:"contentType"`
-	FilePath      string             `bjson:"filePath"`
-	LastUpdatedAt time.Time          `bjson:"lastUpdatedAt"`
-	Name          string             `bjson:"name"`
-	Size          int                `bjson:"size"`
-	Status        int                `bjson:"status"`
+	Id            primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	CreatedAt     time.Time          `bson:"createdAt" json:"createdAt"`
+	ContentType   string             `bson:"contentType" json:"contentType"`
+	FilePath      string             `bson:"filePath" json:"filePath"`
+	LastUpdatedAt time.Time          `bson:"lastUpdatedAt" json:"lastUpdatedAt"`
+	Name          string             `bson:"name" json:"name"`
+	Size          int                `bson:"size" json:"size"`
+	Status        int                `bson:"status" json:"status"`
 }
 
 func NewFile(contentType string, name string, size int, filePath string) *File {

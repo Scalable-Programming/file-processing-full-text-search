@@ -1,11 +1,15 @@
 package controller_upload_file
 
 import (
+	"fmt"
 	"mime/multipart"
 
 	file "github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/models/file"
+	file_status "github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/models/file_status"
 	file_repository "github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/repositories"
+	pdf_reader "github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/services/pdf_reader"
 	storage_upload "github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/services/storage_upload"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func UploadFile(uploadedFile *multipart.FileHeader) (*file.File, error) {
@@ -25,5 +29,23 @@ func UploadFile(uploadedFile *multipart.FileHeader) (*file.File, error) {
 		return nil, err
 	}
 
+	go HandleFileProcessing(newFile.Id, *saved_file_location)
+
 	return newFile, nil
+}
+
+func TriggerPdfParsing(path string) (string, error) {
+	text, err := pdf_reader.ReadPdf(path)
+	return text, err
+}
+
+func HandleFileProcessing(id primitive.ObjectID, path string) {
+	file_repository.UpdateStatus(id, file_status.InProcess)
+	text, err := TriggerPdfParsing(path)
+
+	if err != nil {
+		file_repository.UpdateStatus(id, file_status.Pending)
+	}
+
+	fmt.Print(text)
 }
