@@ -9,17 +9,18 @@ import (
 )
 
 type File struct {
-	Id          primitive.ObjectID `json:"_id"`
-	CreatedAt   time.Time          `json:"createdAt"`
-	ContentType string             `json:"contentType"`
-	Name        string             `json:"name"`
-	Size        int                `json:"size"`
-	Status      int                `json:"status"`
+	Id          primitive.ObjectID `bjson:"_id"`
+	CreatedAt   time.Time          `bjson:"createdAt"`
+	ContentType string             `bjson:"contentType"`
+	Name        string             `bjson:"name"`
+	Size        int                `bjson:"size"`
+	Status      int                `bjson:"status"`
 }
 
 func NewFile(contentType string, name string, size int) *File {
 	newFile := new(File)
 
+	newFile.Id = primitive.NewObjectID()
 	newFile.ContentType = contentType
 	newFile.Name = name
 	newFile.Size = size

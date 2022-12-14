@@ -25,30 +25,8 @@ func GetFiles(filter bson.D) ([]file.File, error) {
 
 	files := []file.File{}
 
-	for cursor.Next(context.Background()) {
-		result := struct {
-			Foo string
-			Bar int32
-		}{}
-		err := cursor.Decode(&result)
-		if err != nil {
-			log.Fatal(err)
-			return nil, err
-		}
-
-		file := file.File{}
-
-		decode_err := cursor.Decode(&file)
-		if decode_err != nil {
-			log.Fatal(decode_err)
-			return nil, err
-		}
-
-		files = append(files, file)
-
-	}
-
-	if err := cursor.Err(); err != nil {
+	err = cursor.All(ctx, &files)
+	if err != nil {
 		return nil, err
 	}
 
