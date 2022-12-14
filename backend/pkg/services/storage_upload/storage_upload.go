@@ -15,13 +15,14 @@ func (m *ValidationContentTypeError) Error() string {
 }
 
 func UploadFileToLocalStorage(fileHeader multipart.FileHeader) (*string, error) {
-	err := os.MkdirAll("./uploads", os.ModePerm)
+	uuid := uuid.New()
+	folderName := "./uploads/" + uuid.String()
+	err := os.MkdirAll(folderName, os.ModePerm)
 	if err != nil {
 		return nil, err
 	}
 
-	uuid := uuid.New()
-	localFilePath := "./uploads/" + uuid.String()
+	localFilePath := folderName + "/" + fileHeader.Filename
 
 	dst, err := os.Create(localFilePath)
 	if err != nil {
@@ -40,9 +41,7 @@ func UploadFileToLocalStorage(fileHeader multipart.FileHeader) (*string, error) 
 		return nil, err
 	}
 
-	fullPath := localFilePath + "/" + fileHeader.Filename
-
-	return &fullPath, nil
+	return &localFilePath, nil
 
 }
 
