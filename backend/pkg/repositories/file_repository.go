@@ -46,3 +46,17 @@ func GetFiles(filter bson.D) ([]file.File, error) {
 
 	return files, nil
 }
+
+func InsertNewFile(contentType string, name string, size int, filePath string) (*file.File, error) {
+	newFile := file.NewFile(contentType, name, size, filePath)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	_, err := fileCollection.InsertOne(ctx, newFile)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return newFile, nil
+}

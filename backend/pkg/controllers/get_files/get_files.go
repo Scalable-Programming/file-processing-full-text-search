@@ -1,4 +1,4 @@
-package controllers
+package controller_get_files
 
 import (
 	"github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/models/file"
