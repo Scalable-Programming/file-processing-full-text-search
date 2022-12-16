@@ -13,6 +13,7 @@ var AppConfig config.Config
 
 func main() {
 	router := gin.Default()
+	router.Static("/uploads", "./uploads")
 
 	routes.GetFilesRoute(router)
 	routes.UploadFile(router)
