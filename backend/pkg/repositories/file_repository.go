@@ -44,7 +44,7 @@ func GetFiles(stringIds []string) ([]file.File, error) {
 			objectIds = append(objectIds, newObjectId)
 		}
 
-		filter["_id"] = bson.M{"$in": objectIds}
+		filter["$and"] = bson.A{bson.M{"_id": bson.M{"$in": objectIds}}, bson.M{"status": file_status.Processed}}
 	}
 
 	cursor, err := fileCollection.Find(ctx, filter)

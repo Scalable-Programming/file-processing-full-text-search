@@ -49,6 +49,7 @@ func HandleFileProcessing(id primitive.ObjectID, path string) {
 	}
 
 	elastic_search.IndexFullFileText(id.Hex(), &text)
+	file_repository.UpdateStatus(id, file_status.Processed)
 
 	// splitPath := strings.SplitAfter(path, "/")
 	// storage_upload.DeleteLocalStorage(strings.Join(splitPath[:len(splitPath)-1], ""))
