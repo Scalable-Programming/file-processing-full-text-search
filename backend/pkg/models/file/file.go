@@ -17,6 +17,7 @@ type File struct {
 	Name          string             `bson:"name" json:"name"`
 	Size          int                `bson:"size" json:"size"`
 	Status        int                `bson:"status" json:"status"`
+	Thumbnail     string             `bson:"thumbnail" json:"thumbnail,omitempty"`
 }
 
 func NewFile(contentType string, name string, size int, filePath string) *File {

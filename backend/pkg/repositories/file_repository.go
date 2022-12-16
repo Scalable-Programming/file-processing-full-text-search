@@ -94,3 +94,7 @@ func UpdateFile(id primitive.ObjectID, updates bson.M) (file.File, error) {
 func UpdateStatus(id primitive.ObjectID, status file_status.FileStatus) {
 	UpdateFile(id, bson.M{"status": status})
 }
+
+func UpdateThumbnail(id primitive.ObjectID, thumbnail string) {
+	UpdateFile(id, bson.M{"thumbnail": thumbnail})
+}

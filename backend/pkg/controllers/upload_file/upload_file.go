@@ -7,6 +7,7 @@ import (
 	file_status "github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/models/file_status"
 	file_repository "github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/repositories"
 	"github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/services/elastic_search"
+	gs "github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/services/ghost_script"
 	pdf_reader "github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/services/pdf_reader"
 	storage_upload "github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/services/storage_upload"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -49,6 +50,14 @@ func HandleFileProcessing(id primitive.ObjectID, path string) {
 	}
 
 	elastic_search.IndexFullFileText(id.Hex(), &text)
+	thumbnailPath, err := gs.GenerateThumbnail(path)
+
+	if err != nil {
+		file_repository.UpdateStatus(id, file_status.Pending)
+		return
+	}
+
+	file_repository.UpdateThumbnail(id, thumbnailPath)
 	file_repository.UpdateStatus(id, file_status.Processed)
 
 	// splitPath := strings.SplitAfter(path, "/")
