@@ -2,6 +2,7 @@ package storage_upload
 
 import (
 	"io"
+	"log"
 	"mime/multipart"
 	"os"
 
@@ -53,4 +54,11 @@ func ValidateFileType(fileHeader multipart.FileHeader) (*string, error) {
 	}
 
 	return &validContentType, nil
+}
+
+func DeleteLocalStorage(path string) {
+	err := os.RemoveAll(path)
+	if err != nil {
+		log.Println("Error removing file", err)
+	}
 }

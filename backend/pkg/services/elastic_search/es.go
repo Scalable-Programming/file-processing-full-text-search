@@ -26,13 +26,42 @@ func Connect() {
 	}
 
 	esClient = es
+
+	createIndex()
+}
+
+func createIndex() {
+	indexExistRequest := esapi.IndicesExistsRequest{
+		Index: []string{fullTextSeachIndex},
+	}
+
+	indexExistResponse, err := indexExistRequest.Do(context.Background(), esClient)
+
+	if err != nil {
+		log.Fatalf("Error checking for index: %s", err)
+	}
+
+	if indexExistResponse.StatusCode == 200 {
+		return
+	}
+
+	indexReq := esapi.IndicesCreateRequest{
+		Index: fullTextSeachIndex,
+	}
+
+	_, err = indexReq.Do(context.Background(), esClient)
+
+	if err != nil {
+		log.Fatalf("Error creating index: %s", err)
+	}
 }
 
 func IndexFullFileText(id string, text *string) {
 	data, err := json.Marshal(EsFullTextData{FileId: id, Text: *text})
 
 	if err != nil {
-		log.Fatalf("Error marshaling document: %s", err)
+		log.Print("Error marshaling document", err)
+		return
 	}
 
 	req := esapi.IndexRequest{
@@ -42,17 +71,15 @@ func IndexFullFileText(id string, text *string) {
 	}
 
 	res, err := req.Do(context.Background(), esClient)
-	if err != nil {
-		log.Fatalf("Error getting response: %s", err)
-	}
 	defer res.Body.Close()
 
-	if res.IsError() {
-		log.Printf("[%s] Error indexing document", res.Status())
+	if err != nil || res.IsError() {
+		log.Print("Error indexing document", err)
+		return
 	}
 }
 
-func Search(text string) []string {
+func Search(text string) ([]string, error) {
 	var (
 		r               map[string]interface{}
 		buf             bytes.Buffer
@@ -67,7 +94,7 @@ func Search(text string) []string {
 		},
 	}
 	if err := json.NewEncoder(&buf).Encode(query); err != nil {
-		log.Fatalf("Error encoding query: %s", err)
+		return nil, err
 	}
 
 	res, err := esClient.Search(
@@ -78,11 +105,11 @@ func Search(text string) []string {
 		esClient.Search.WithPretty(),
 	)
 	if err != nil {
-		log.Fatalf("Error getting response: %s", err)
+		return nil, err
 	}
 
 	if err := json.NewDecoder(res.Body).Decode(&r); err != nil {
-		log.Fatalf("Error parsing the response body: %s", err)
+		return nil, err
 	}
 
 	defer res.Body.Close()
@@ -91,7 +118,7 @@ func Search(text string) []string {
 	hits, ok := r["hits"].(map[string]interface{})
 
 	if !ok {
-		return searchResultIds
+		return searchResultIds, nil
 	}
 
 	for _, hit := range hits["hits"].([]interface{}) {
@@ -99,5 +126,5 @@ func Search(text string) []string {
 		searchResultIds = append(searchResultIds, fileId)
 	}
 
-	return searchResultIds
+	return searchResultIds, nil
 }

@@ -2,7 +2,6 @@ package file_repository
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/models/file"
@@ -28,13 +27,28 @@ func CreateMongoIndex() {
 	}
 }
 
-func GetFiles(filter bson.D) ([]file.File, error) {
+func GetFiles(stringIds []string) ([]file.File, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
+	filter := bson.M{}
+
+	if len(stringIds) > 0 {
+		objectIds := []primitive.ObjectID{}
+		for _, id := range stringIds {
+			newObjectId, err := primitive.ObjectIDFromHex(id)
+			if err != nil {
+				return nil, err
+			}
+
+			objectIds = append(objectIds, newObjectId)
+		}
+
+		filter["_id"] = bson.M{"$in": objectIds}
+	}
+
 	cursor, err := fileCollection.Find(ctx, filter)
 	if err != nil {
-		log.Fatal(err)
 		return nil, err
 	}
 	defer cursor.Close(context.Background())

@@ -9,8 +9,12 @@ import (
 
 func GetFilesRoute(router *gin.Engine) {
 	router.GET("/files", func(c *gin.Context) {
-		files, err := controller_get_files.GetFiles()
+		searchFilter, hasSearchFilter := c.GetQuery("search")
+		if !hasSearchFilter {
+			searchFilter = ""
+		}
 
+		files, err := controller_get_files.GetFiles(searchFilter)
 		if err != nil {
 			c.IndentedJSON(http.StatusInternalServerError, err)
 			return

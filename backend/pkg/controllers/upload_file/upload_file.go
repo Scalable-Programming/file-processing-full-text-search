@@ -1,12 +1,12 @@
 package controller_upload_file
 
 import (
-	"fmt"
 	"mime/multipart"
 
 	file "github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/models/file"
 	file_status "github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/models/file_status"
 	file_repository "github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/repositories"
+	"github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/services/elastic_search"
 	pdf_reader "github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/services/pdf_reader"
 	storage_upload "github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/services/storage_upload"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -45,7 +45,12 @@ func HandleFileProcessing(id primitive.ObjectID, path string) {
 
 	if err != nil {
 		file_repository.UpdateStatus(id, file_status.Pending)
+		return
 	}
 
-	fmt.Print(text)
+	elastic_search.IndexFullFileText(id.Hex(), &text)
+
+	// splitPath := strings.SplitAfter(path, "/")
+	// storage_upload.DeleteLocalStorage(strings.Join(splitPath[:len(splitPath)-1], ""))
+
 }
