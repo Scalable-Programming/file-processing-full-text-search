@@ -1,5 +1,12 @@
+import { QueryClientProvider } from "react-query";
+import { queryClient } from "./reactQuery";
+
 const App = () => {
-  return <div></div>;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <div></div>
+    </QueryClientProvider>
+  );
 };
 
 export default App;
