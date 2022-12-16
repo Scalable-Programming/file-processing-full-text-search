@@ -9,6 +9,7 @@ import (
 type Config struct {
 	DbPassword    string `mapstructure:"MONGO_INITDB_ROOT_PASSWORD"`
 	DbUsername    string `mapstructure:"MONGO_INITDB_ROOT_USERNAME"`
+	Frontend      string `mapstructure:"FRONTEND"`
 	MongoDatabase string `mapstructure:"MONGO_DATABASE"`
 	MongoUri      string `mapstructure:"MONGO_URI"`
 	Port          string `mapstructure:"PORT"`

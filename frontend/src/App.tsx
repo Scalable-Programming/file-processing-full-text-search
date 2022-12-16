@@ -1,10 +1,13 @@
+import { useState } from "react";
 import { QueryClientProvider } from "react-query";
 import { queryClient } from "./reactQuery";
+import { FileGrid } from "./components/fileGrid";
 
 const App = () => {
+  const [search, setSearch] = useState("");
   return (
     <QueryClientProvider client={queryClient}>
-      <div></div>
+      <FileGrid search={search} />
     </QueryClientProvider>
   );
 };

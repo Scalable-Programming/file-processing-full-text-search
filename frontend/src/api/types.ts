@@ -7,5 +7,5 @@ export interface FileResponse {
   name: string;
   size: number;
   status: number;
-  thumbnail: string;
+  thumbnail?: string;
 }
