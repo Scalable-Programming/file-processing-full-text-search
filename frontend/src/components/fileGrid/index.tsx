@@ -33,7 +33,7 @@ export const FileGrid = ({ search }: Props) => {
   return (
     <Box display="flex" flexWrap={"wrap"} gap={2}>
       {data.map((file) => (
-        <Card sx={{ maxWidth: 200 }}>
+        <Card sx={{ maxWidth: 200 }} key={file.id}>
           <CardActionArea>
             <CardMedia
               component="img"
