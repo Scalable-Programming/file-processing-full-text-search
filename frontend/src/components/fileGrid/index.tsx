@@ -42,7 +42,7 @@ export const FileGrid = ({ search }: Props) => {
               alt="green iguana"
             />
             <CardContent>
-              <Typography gutterBottom variant="body1" component="div">
+              <Typography gutterBottom variant="body1" component="div" noWrap>
                 {file.name}
               </Typography>
               <Typography variant="body2" color="text.secondary">
