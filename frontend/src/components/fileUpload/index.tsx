@@ -15,8 +15,8 @@ export const FileUpload = () => {
 
   return (
     <Box {...getRootProps()}>
+      <input {...getInputProps()} />
       <IconButton>
-        <input {...getInputProps()} />
         <FileUploadIcon />
       </IconButton>
     </Box>
