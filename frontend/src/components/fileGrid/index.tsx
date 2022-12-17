@@ -31,22 +31,22 @@ export const FileGrid = ({ search }: Props) => {
   }
 
   return (
-    <Box>
+    <Box display="flex" flexWrap={"wrap"} gap={2}>
       {data.map((file) => (
         <Card sx={{ maxWidth: 200 }}>
           <CardActionArea>
             <CardMedia
               component="img"
-              height="140"
+              height="210"
               image={getImageSrc(file.thumbnail)}
               alt="green iguana"
             />
             <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
+              <Typography gutterBottom variant="body1" component="div">
                 {file.name}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Created at {format(new Date(file.createdAt), "MM. dd. yyyy")}
+                Created at {format(new Date(file.createdAt), "dd. MMM. yyyy")}
               </Typography>
             </CardContent>
           </CardActionArea>
