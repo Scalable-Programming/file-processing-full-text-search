@@ -11,7 +11,12 @@ export const FileUpload = () => {
     Promise.all(acceptedFiles.map((file) => mutate({ file })));
   }, []);
 
-  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: {
+      "application/pdf": [],
+    },
+  });
 
   return (
     <Box {...getRootProps()}>
