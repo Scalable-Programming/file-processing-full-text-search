@@ -1,5 +1,5 @@
 import { config } from "./../config";
-import { FileResponse } from "./types";
+import { FilesResponse } from "./types";
 
 export const postFile = async (file: Blob) => {
   const formData = new FormData();
@@ -14,5 +14,5 @@ export const postFile = async (file: Blob) => {
     throw new Error("Error posting file");
   }
 
-  return result.json() as Promise<FileResponse>;
+  return result.json() as Promise<FilesResponse>;
 };

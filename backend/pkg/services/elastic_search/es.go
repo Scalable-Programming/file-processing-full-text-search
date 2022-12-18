@@ -128,3 +128,52 @@ func Search(text string) ([]string, error) {
 
 	return searchResultIds, nil
 }
+
+func GetFileText(fileId string) (*string, error) {
+	var (
+		r   map[string]interface{}
+		buf bytes.Buffer
+	)
+
+	query := map[string]interface{}{
+		"query": map[string]interface{}{
+			"match": map[string]interface{}{
+				"FileId": fileId,
+			},
+		},
+	}
+	if err := json.NewEncoder(&buf).Encode(query); err != nil {
+		return nil, err
+	}
+
+	res, err := esClient.Search(
+		esClient.Search.WithContext(context.Background()),
+		esClient.Search.WithIndex(fullTextSeachIndex),
+		esClient.Search.WithBody(&buf),
+		esClient.Search.WithTrackTotalHits(true),
+		esClient.Search.WithPretty(),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.NewDecoder(res.Body).Decode(&r); err != nil {
+		return nil, err
+	}
+
+	defer res.Body.Close()
+
+	hits, ok := r["hits"].(map[string]interface{})["hits"].([]interface{})
+	if !ok {
+		return nil, nil
+	}
+
+	text, ok := hits[0].(map[string]interface{})["_source"].(map[string]interface{})["Text"].(string)
+
+	if !ok {
+		return nil, nil
+	}
+
+	return &text, err
+
+}

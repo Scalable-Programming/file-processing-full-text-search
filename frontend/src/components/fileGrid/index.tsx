@@ -13,9 +13,10 @@ import { getImageSrc } from "../../api/utils";
 
 interface Props {
   search: string;
+  onFileClick: (id: string) => void;
 }
 
-export const FileGrid = ({ search }: Props) => {
+export const FileGrid = ({ search, onFileClick }: Props) => {
   const { data, isLoading, isError } = useGetFiles(search);
 
   if (isLoading) {
@@ -33,7 +34,11 @@ export const FileGrid = ({ search }: Props) => {
   return (
     <Box display="flex" flexWrap={"wrap"} gap={2}>
       {data.map((file) => (
-        <Card sx={{ maxWidth: 200 }} key={file.id}>
+        <Card
+          sx={{ maxWidth: 200 }}
+          key={file.id}
+          onClick={() => onFileClick(file.id)}
+        >
           <CardActionArea>
             <CardMedia
               component="img"

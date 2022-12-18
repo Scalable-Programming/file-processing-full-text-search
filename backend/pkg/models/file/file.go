@@ -17,6 +17,7 @@ type File struct {
 	Name          string             `bson:"name" json:"name"`
 	Size          int                `bson:"size" json:"size"`
 	Status        int                `bson:"status" json:"status"`
+	Text          string             `bson:"text,omitempty" json:"text,omitempty"`
 	Thumbnail     string             `bson:"thumbnail" json:"thumbnail,omitempty"`
 }
 

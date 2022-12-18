@@ -19,6 +19,7 @@ func main() {
 
 	routes.GetFilesRoute(router)
 	routes.UploadFile(router)
+	routes.GetFileRoute(router)
 
 	file_repository.CreateMongoIndex()
 	elastic_search.Connect()

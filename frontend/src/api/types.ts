@@ -1,4 +1,4 @@
-export interface FileResponse {
+export interface FilesResponse {
   id: string;
   createdAt: string;
   contentType: string;
@@ -8,4 +8,8 @@ export interface FileResponse {
   size: number;
   status: number;
   thumbnail?: string;
+}
+
+export interface FileReponse extends FilesResponse {
+  text: string;
 }

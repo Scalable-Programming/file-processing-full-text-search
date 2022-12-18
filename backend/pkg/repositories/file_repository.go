@@ -98,3 +98,24 @@ func UpdateStatus(id primitive.ObjectID, status file_status.FileStatus) {
 func UpdateThumbnail(id primitive.ObjectID, thumbnail string) {
 	UpdateFile(id, bson.M{"thumbnail": thumbnail})
 }
+
+func GetFile(fileId string) (*file.File, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	fileById := file.File{}
+	fileObjectId, err := primitive.ObjectIDFromHex(fileId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	err = fileCollection.FindOne(ctx, bson.M{"_id": fileObjectId}).Decode(&fileById)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &fileById, nil
+
+}

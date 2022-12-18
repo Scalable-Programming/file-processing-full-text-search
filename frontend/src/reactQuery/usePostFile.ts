@@ -1,4 +1,4 @@
-import { FileResponse } from "./../api/types";
+import { FilesResponse } from "./../api/types";
 import { useMutation } from "react-query";
 import { queryClient } from ".";
 import { postFile } from "../api/postFile";
@@ -9,7 +9,7 @@ interface MutationProps {
 }
 
 export const usePostFile = () =>
-  useMutation<FileResponse, unknown, MutationProps>(
+  useMutation<FilesResponse, unknown, MutationProps>(
     ({ file }) => postFile(file),
     {
       onSuccess: () => {

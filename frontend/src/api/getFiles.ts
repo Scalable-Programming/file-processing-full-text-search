@@ -1,5 +1,5 @@
 import { config } from "./../config";
-import { FileResponse } from "./types";
+import { FilesResponse } from "./types";
 
 export const getFiles = async (search: string) => {
   const result = await fetch(`${config.backend}/files?search=${search}`);
@@ -8,5 +8,5 @@ export const getFiles = async (search: string) => {
     throw new Error("Error fetching files");
   }
 
-  return result.json() as Promise<FileResponse[]>;
+  return result.json() as Promise<FilesResponse[]>;
 };
