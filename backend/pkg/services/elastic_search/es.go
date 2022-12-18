@@ -10,6 +10,12 @@ import (
 	"github.com/elastic/go-elasticsearch/v7/esapi"
 )
 
+type NoEsDocumentError struct{}
+
+func (m *NoEsDocumentError) Error() string {
+	return "File not found"
+}
+
 type EsFullTextData struct {
 	FileId string
 	Text   string
@@ -163,16 +169,13 @@ func GetFileText(fileId string) (*string, error) {
 
 	defer res.Body.Close()
 
-	hits, ok := r["hits"].(map[string]interface{})["hits"].([]interface{})
-	if !ok {
-		return nil, nil
+	hits := r["hits"].(map[string]interface{})["hits"].([]interface{})
+
+	if len(hits) == 0 {
+		return nil, &NoEsDocumentError{}
 	}
 
-	text, ok := hits[0].(map[string]interface{})["_source"].(map[string]interface{})["Text"].(string)
-
-	if !ok {
-		return nil, nil
-	}
+	text := hits[0].(map[string]interface{})["_source"].(map[string]interface{})["Text"].(string)
 
 	return &text, err
 

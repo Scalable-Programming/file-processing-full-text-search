@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	controller_upload_file "github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/controllers/upload_file"
+	error_handler "github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/error_handler"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,16 +14,17 @@ func UploadFile(router *gin.Engine) {
 		file, err := c.FormFile("file")
 
 		if err != nil {
-			c.IndentedJSON(http.StatusBadRequest, err)
+			error_handler.HandleRestApiError(c, err)
+			return
 		}
 
 		newUploadedFile, err := controller_upload_file.UploadFile(file)
 
 		if err != nil {
-			c.IndentedJSON(http.StatusBadRequest, err)
+			error_handler.HandleRestApiError(c, err)
 			return
 		}
 
-		c.IndentedJSON(http.StatusOK, newUploadedFile)
+		c.IndentedJSON(http.StatusCreated, newUploadedFile)
 	})
 }

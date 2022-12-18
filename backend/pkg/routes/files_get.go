@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	controller_get_files "github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/controllers/get_files"
+	error_handler "github.com/Scalable-Programming/file-processing-full-text-search/backend/pkg/error_handler"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,7 +17,7 @@ func GetFilesRoute(router *gin.Engine) {
 
 		files, err := controller_get_files.GetFiles(searchFilter)
 		if err != nil {
-			c.IndentedJSON(http.StatusInternalServerError, err)
+			error_handler.HandleRestApiError(c, err)
 			return
 		}
 
