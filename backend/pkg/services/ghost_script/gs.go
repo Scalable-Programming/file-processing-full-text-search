@@ -15,7 +15,7 @@ func GenerateThumbnail(path string) (string, error) {
 		return "", err
 	}
 
-	args := []string{"-o", outputFile, "-sDEVICE=jpeg", "-dDEVICEHEIGHT=720", "-sPageList=1", "-dPDFFitPage", path}
+	args := []string{"-o", outputFile, "-dGraphicsAlphaBits=4", "-dTextAlphaBits=4", "-sDEVICE=jpeg", "-dDEVICEHEIGHT=720", "-sPageList=1", "-dPDFFitPage", path}
 
 	cmd := exec.Command(gsPathExecutable, args...)
 
